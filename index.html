@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Bottle Wholesale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .close-btn {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section">
+        <h1>WHOLESALE</h1>
+        <h2>Become a Stockist</h2>
+        <p>Looking to offer your customers eco-friendly products coupled with a commitment to making a tangible impact? Every Ocean Bottle product sold funds the collection of ocean-bound plastic.</p>
+        <p>If you're interested in including Ocean Bottle in your store, fill in the form below. We'll send you our wholesale catalogue, so you can explore our range of products.</p>
+        <p>Nb: Form will be built in HubSpot with more questions, and embedded here on the page and as a pop-up on the button.</p>
+        <button id="openLightbox" class="button">Enquire Today</button>
+    </div>
+
+    <div class="section">
+        <h2>Recycled Materials</h2>
+        <p>We now use a minimum of 60% recycled content across our products. We always avoid composite materials and all our products can be disassembled for recycling.</p>
+    </div>
+
+    <div class="section">
+        <h2>10 Year Warranty</h2>
+        <p>Every product comes with a 10-year warranty and free replacement parts for life.</p>
+    </div>
+
+    <div class="section">
+        <h2>Responsible Supply Chain</h2>
+        <p>Our factory in China goes above and beyond what the next best competitor offers in terms of employee conditions, pay, factory safety, and environmental impact.</p>
+    </div>
+
+    <div class="section">
+        <h2>B Corp Certified</h2>
+        <p>We are a Certified B Corp, meeting the highest standards of social and environmental performance, and using business as a force for good.</p>
+    </div>
+
+    <div class="section">
+        <h2>Find Us</h2>
+        <p>Where Ocean Bottle is Stocked</p>
+    </div>
+</div>
+
+<div id="lightbox" class="lightbox">
+    <div class="lightbox-content">
+        <h2>Wholesale Enquiry Form</h2>
+        <p>This is where the HubSpot form will be embedded.</p>
+        <br>
+        <button class="close-btn" id="closeLightbox">Close</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('openLightbox').addEventListener('click', function() {
+        document.getElementById('lightbox').style.display = 'flex';
+    });
+
+    document.getElementById('closeLightbox').addEventListener('click', function() {
+        document.getElementById('lightbox').style.display = 'none';
+    });
+</script>
+
+</body>
+</html>
