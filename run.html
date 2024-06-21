@@ -16,7 +16,9 @@
             width: 600px;
             height: 400px;
             border: 1px solid black;
+            border-radius: 50%;
             margin-top: 20px;
+            overflow: hidden;
         }
         .dot {
             position: absolute;
@@ -24,90 +26,165 @@
             height: 20px;
             border-radius: 50%;
         }
+        #nameDisplay1 {
+            color: red;
+        }
+        #nameDisplay2 {
+            color: blue;
+        }
+        #nameDisplay3 {
+            color: green;
+        }
         .dot1 {
             background-color: red;
         }
         .dot2 {
             background-color: blue;
         }
+        .dot3 {
+            background-color: green;
+        }
+        .distance {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Running Pace Race Simulation</h1>
     <form id="paceForm">
-        <label for="pace1">Pace 1 (km/h): </label>
-        <input type="number" id="pace1" name="pace1" step="0.1" required>
-        <label for="pace2">Pace 2 (km/h): </label>
-        <input type="number" id="pace2" name="pace2" step="0.1" required>
+        <label for="name1">Name 1: </label>
+        <input type="text" id="name1" name="name1" placeholder="Runner 1" required>
+        <label for="pace1">Pace 1 (min/km): </label>
+        <input type="text" id="pace1" name="pace1" pattern="\d{1,2}:\d{2}" placeholder="5:00" required>
+        <br>
+        <label for="name2">Name 2: </label>
+        <input type="text" id="name2" name="name2" placeholder="Runner 2" required>
+        <label for="pace2">Pace 2 (min/km): </label>
+        <input type="text" id="pace2" name="pace2" pattern="\d{1,2}:\d{2}" placeholder="4:30" required>
+        <br>
+        <label for="name3">Name 3: </label>
+        <input type="text" id="name3" name="name3" placeholder="Runner 3" required>
+        <label for="pace3">Pace 3 (min/km): </label>
+        <input type="text" id="pace3" name="pace3" pattern="\d{1,2}:\d{2}" placeholder="6:00" required>
+        <br>
         <button type="submit">Start Race</button>
     </form>
+    <label for="speedControl">Adjust Speed:</label>
+    <input type="range" id="speedControl" min="1" max="10" value="5">
     <div id="raceTrack">
         <div class="dot dot1" id="dot1"></div>
         <div class="dot dot2" id="dot2"></div>
+        <div class="dot dot3" id="dot3"></div>
+    </div>
+    <div class="distance">
+        <p>Distance <span id="nameDisplay1">Runner 1</span>: <span id="distance1">0</span> m</p>
+        <p>Distance <span id="nameDisplay2">Runner 2</span>: <span id="distance2">0</span> m</p>
+        <p>Distance <span id="nameDisplay3">Runner 3</span>: <span id="distance3">0</span> m</p>
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name1 = urlParams.get('name1');
+            const name2 = urlParams.get('name2');
+            const name3 = urlParams.get('name3');
+            const pace1 = urlParams.get('pace1');
+            const pace2 = urlParams.get('pace2');
+            const pace3 = urlParams.get('pace3');
+            const speed = urlParams.get('speed');
+
+            if (name1) {
+                document.getElementById('name1').value = name1;
+                document.getElementById('nameDisplay1').textContent = name1;
+            }
+            if (name2) {
+                document.getElementById('name2').value = name2;
+                document.getElementById('nameDisplay2').textContent = name2;
+            }
+            if (name3) {
+                document.getElementById('name3').value = name3;
+                document.getElementById('nameDisplay3').textContent = name3;
+            }
+            if (pace1) {
+                document.getElementById('pace1').value = pace1;
+            }
+            if (pace2) {
+                document.getElementById('pace2').value = pace2;
+            }
+            if (pace3) {
+                document.getElementById('pace3').value = pace3;
+            }
+            if (speed) {
+                document.getElementById('speedControl').value = speed;
+            }
+        });
+
         const form = document.getElementById('paceForm');
         const dot1 = document.getElementById('dot1');
         const dot2 = document.getElementById('dot2');
+        const dot3 = document.getElementById('dot3');
+        const distance1 = document.getElementById('distance1');
+        const distance2 = document.getElementById('distance2');
+        const distance3 = document.getElementById('distance3');
+        const speedControl = document.getElementById('speedControl');
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
 
-            const pace1 = parseFloat(document.getElementById('pace1').value);
-            const pace2 = parseFloat(document.getElementById('pace2').value);
+            const pace1 = document.getElementById('pace1').value;
+            const pace2 = document.getElementById('pace2').value;
+            const pace3 = document.getElementById('pace3').value;
 
-            startRace(pace1, pace2);
+            const speed1 = convertPaceToSpeed(pace1);
+            const speed2 = convertPaceToSpeed(pace2);
+            const speed3 = convertPaceToSpeed(pace3);
+
+            startRace(speed1, speed2, speed3);
         });
 
-        function startRace(pace1, pace2) {
+        function convertPaceToSpeed(pace) {
+            const [minutes, seconds] = pace.split(':').map(Number);
+            const totalMinutes = minutes + (seconds / 60);
+            const speed = 60 / totalMinutes; // km/h
+            return speed;
+        }
+
+        function startRace(speed1, speed2, speed3) {
             const trackWidth = 600;
             const trackHeight = 400;
-            const totalDistance = trackWidth * 2 + trackHeight * 2;
+            const totalDistance = Math.PI * (trackWidth + trackHeight) *1.59;
 
-            const speed1 = pace1 * 1000 / 3600; // Convert km/h to m/s
-            const speed2 = pace2 * 1000 / 3600; // Convert km/h to m/s
+            const duration1 = totalDistance / (speed1 * 1000 / 3600); // Convert km/h to m/s
+            const duration2 = totalDistance / (speed2 * 1000 / 3600); // Convert km/h to m/s
+            const duration3 = totalDistance / (speed3 * 1000 / 3600); // Convert km/h to m/s
 
-            const duration1 = totalDistance / speed1;
-            const duration2 = totalDistance / speed2;
+            moveDot(dot1, duration1, distance1, totalDistance, trackWidth, trackHeight);
+            moveDot(dot2, duration2, distance2, totalDistance, trackWidth, trackHeight);
+            moveDot(dot3, duration3, distance3, totalDistance, trackWidth, trackHeight);
+        }
 
-            let position1 = 0;
-            let position2 = 0;
+        function moveDot(dot, duration, distanceElement, totalDistance, trackWidth, trackHeight) {
+            const startTime = performance.now();
+            function update() {
+                const speedFactor = speedControl.value / 10;
+                const elapsed = (performance.now() - startTime) * speedFactor;
+                const progress = elapsed / duration;
+                const position = totalDistance * progress;
 
-            function moveDot(dot, duration, position) {
-                const startTime = performance.now();
-                function update() {
-                    const elapsed = performance.now() - startTime;
-                    const progress = elapsed / duration;
-                    position = totalDistance * progress;
+                const angle = (position / totalDistance) * 2 * Math.PI;
+                const x = (trackWidth / 2) * Math.cos(angle) + (trackWidth / 2) - 10;
+                const y = (trackHeight / 2) * Math.sin(angle) + (trackHeight / 2) - 10;
 
-                    let x, y;
-                    if (position <= trackWidth) {
-                        x = position;
-                        y = 0;
-                    } else if (position <= trackWidth + trackHeight) {
-                        x = trackWidth;
-                        y = position - trackWidth;
-                    } else if (position <= 2 * trackWidth + trackHeight) {
-                        x = 2 * trackWidth + trackHeight - position;
-                        y = trackHeight;
-                    } else {
-                        x = 0;
-                        y = totalDistance - position;
-                    }
+                dot.style.left = `${x}px`;
+                dot.style.top = `${y}px`;
 
-                    dot.style.left = `${x}px`;
-                    dot.style.top = `${y}px`;
+                distanceElement.textContent = Math.round(position);
 
-                    if (progress < 1) {
-                        requestAnimationFrame(update);
-                    }
+                if (progress < 1) {
+                    requestAnimationFrame(update);
                 }
-                update();
             }
-
-            moveDot(dot1, duration1, position1);
-            moveDot(dot2, duration2, position2);
+            update();
         }
     </script>
 </body>
